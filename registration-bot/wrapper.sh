@@ -22,6 +22,7 @@ echo $$ > "$WRAPPER_PID"
 while true; do
     # Run the main script in the background
     nohup $SCRIPT > $LOG_FILE 2>&1 &
+    # $SCRIPT > $LOG_FILE 2>&1
 
     # Get the PID of the background process
     PID=$!

@@ -4,7 +4,7 @@ LOG_FILE="launcher.log"
 
 # Function to log messages with timestamp in IST
 log_message() {
-    local timestamp=$(TZ=Asia/Kolkata date +"%Y-%m-%d %H:%M:%S")
+    local timestamp=$(TZ=Asia/Tokyo date +"%Y-%m-%d %H:%M:%S")
     echo "[$timestamp] $1" >> $LOG_FILE
 }
 
@@ -25,6 +25,18 @@ log_message "Started wrapper-3.sh"
 sleep 10
 nohup ./wrapper-4.sh >> $LOG_FILE 2>&1 &
 log_message "Started wrapper-4.sh"
+
+# ./wrapper.sh >> $LOG_FILE 2>&1
+# log_message "Started wrapper.sh"
+# sleep 10
+# ./wrapper-2.sh >> $LOG_FILE 2>&1
+# log_message "Started wrapper-2.sh"
+# sleep 10
+# ./wrapper-3.sh >> $LOG_FILE 2>&1
+# log_message "Started wrapper-3.sh"
+# sleep 10
+# ./wrapper-4.sh >> $LOG_FILE 2>&1
+# log_message "Started wrapper-4.sh"
 
 # Store the PIDs of the wrapper processes and their corresponding sn-reg.sh scripts
 WRAPPER_PIDS=("$(pgrep -f "wrapper.sh") $(pgrep -f "wrapper-2.sh") $(pgrep -f "wrapper-3.sh") $(pgrep -f "wrapper-4.sh")")

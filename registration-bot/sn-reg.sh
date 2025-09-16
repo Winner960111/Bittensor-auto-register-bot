@@ -11,22 +11,22 @@ proc timestamp {} {
 }
 
 # Function to run after successful registration
-proc run_after_successful_registration {} {
-    # This function contains the command to run after successful registration.
-    spawn pm2 restart miner_26
-    expect "Process successfully started"
-    exit 128
-}
+# proc run_after_successful_registration {} {
+#     # This function contains the command to run after successful registration.
+#     spawn pm2 restart miner_26
+#     expect "Process successfully started"
+#     exit 128
+# }
 
 # Function for registration
 proc registration {} {
-    spawn btcli s register --subtensor.network finney --netuid 26 --wallet.name sn26 --wallet.hotkey sn26-hot
+    spawn btcli subnet register --wallet.name <> --wallet.hotkey <> --netuid 43
 
     # Log timestamp for registration attempt
     puts "[timestamp] Attempting registration..."
 
-    expect "Enter password to unlock key" {
-        send "XXXXXXX\r"
+    expect "Enter your password" {
+        send "Graphite12345!@#$%\r"
         expect ""
     }
 
@@ -45,7 +45,8 @@ proc registration {} {
         }
         -re ".*Registered.*" {
             puts "[timestamp] Registration completed successfully."
-            run_after_successful_registration
+            # run_after_successful_registration
+            exit 128
         }
         -timeout 180 {
             puts "[timestamp] Timeout: Unexpected situation. Restarting registration..."
