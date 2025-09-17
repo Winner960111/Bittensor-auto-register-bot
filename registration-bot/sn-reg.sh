@@ -25,12 +25,21 @@ proc registration {} {
 
         puts "[timestamp] Attempting registration..."
 
+        expect "Do you want to continue" {
+            send "y\r"
+            expect ""
+        }
+        
         expect "Enter your password" {
             send "Graphite12345!@#$%\r"
             expect ""
         }
 
         expect {
+            -re ".*Insufficient balance.*" {
+                puts "[timestamp] Error encountered: Insufficient balance. Will retry..."
+                return
+            }
             -re ".*TooManyRegistrationsThisInterval.*|.*❌ Failed.*" {
                 puts "[timestamp] Error encountered: TooManyRegistrationsThisInterval or ❌ Failed. Will retry..."
                 return
@@ -55,7 +64,12 @@ proc registration {} {
                 puts "[timestamp] Unexpected end of file. Will retry..."
                 return
             }
+            default {
+                puts "[timestamp] Unexpected output. Will retry..."
+                return
+            }
         }
+
     }
 }
 
