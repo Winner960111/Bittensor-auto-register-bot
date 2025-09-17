@@ -33,16 +33,16 @@ proc registration {} {
 
     expect {
         -re ".*TooManyRegistrationsThisInterval.*|.*❌ Failed.*" {
-            puts "[timestamp] Error encountered: TooManyRegistrationsThisInterval or ❌ Failed. Restarting registration..."
-            registration
+            puts "[timestamp] Error encountered: TooManyRegistrationsThisInterval or ❌ Failed. Will retry..."
+            return
         }
         -re ".*NotEnoughBalanceToStake.*|.*❌ Failed.*" {
-            puts "[timestamp] Error encountered: NotEnoughBalanceToStake or ❌ Failed. Restarting registration..."
-            registration
+            puts "[timestamp] Error encountered: NotEnoughBalanceToStake or ❌ Failed. Will retry..."
+            return
         }
         -re ".*RegistrationDisabled.*|.*❌ Failed.*" {
-            puts "Error encountered: RegistrationDisabled or ❌ Failed. Restarting registration..."
-            registration
+            puts "[timestamp] Error encountered: RegistrationDisabled or ❌ Failed. Will retry..."
+            return
         }
         -re ".*Registered.*" {
             puts "[timestamp] Registration completed successfully."
@@ -50,16 +50,20 @@ proc registration {} {
             exit 128
         }
         -timeout 180 {
-            puts "[timestamp] Timeout: Unexpected situation. Restarting registration..."
-            registration
+            puts "[timestamp] Timeout: Unexpected situation. Will retry..."
+            return
         }
         eof {
-            puts "[timestamp] Unexpected end of file. Restarting registration..."
-            registration
+            puts "[timestamp] Unexpected end of file. Will retry..."
+            return
         }
     }
 }
 
 # Run the registration function
-registration
-puts "[timestamp] Script completed."
+# Run the registration function in a loop
+while {1} {
+    registration
+    puts "[timestamp] Waiting $retry_interval seconds before next attempt..."
+    sleep $retry_interval
+}
