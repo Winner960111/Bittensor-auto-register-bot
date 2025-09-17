@@ -26,18 +26,6 @@ sleep 10
 nohup ./wrapper-4.sh >> $LOG_FILE 2>&1 &
 log_message "Started wrapper-4.sh"
 
-# ./wrapper.sh >> $LOG_FILE 2>&1
-# log_message "Started wrapper.sh"
-# sleep 10
-# ./wrapper-2.sh >> $LOG_FILE 2>&1
-# log_message "Started wrapper-2.sh"
-# sleep 10
-# ./wrapper-3.sh >> $LOG_FILE 2>&1
-# log_message "Started wrapper-3.sh"
-# sleep 10
-# ./wrapper-4.sh >> $LOG_FILE 2>&1
-# log_message "Started wrapper-4.sh"
-
 # Store the PIDs of the wrapper processes and their corresponding sn-reg.sh scripts
 WRAPPER_PIDS=("$(pgrep -f "wrapper.sh") $(pgrep -f "wrapper-2.sh") $(pgrep -f "wrapper-3.sh") $(pgrep -f "wrapper-4.sh")")
 SN_REG_PIDS=("$(pgrep -f "sn-reg.sh") $(pgrep -f "sn-reg-2.sh") $(pgrep -f "sn-reg-3.sh") $(pgrep -f "sn-reg-4.sh")")

@@ -31,13 +31,13 @@ while true; do
 
     # Check the exit status of the background process
     EXIT_STATUS=$?
-    log_message "auto-reg.sh process exited with status: $EXIT_STATUS"
+    log_message "sn-reg.sh process exited with status: $EXIT_STATUS"
     
     if [ $EXIT_STATUS -eq 128 ]; then
-        log_message "auto-reg.sh process completed successfully. Exiting wrapper."
+        log_message "sn-reg.sh process completed successfully. Exiting wrapper."
         break  # Exit the main loop
     else
-        log_message "Error: auto-reg.sh process exited with non-zero status. Restarting script..."
+        log_message "Error: sn-reg.sh process exited with non-zero status. Restarting script..."
     fi
 
     # Wait for a while before restarting

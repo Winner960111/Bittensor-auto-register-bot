@@ -20,6 +20,7 @@ proc timestamp {} {
 
 # Function for registration
 proc registration {} {
+
     spawn btcli subnet register --wallet.name <> --wallet.hotkey <> --netuid 43
 
     # Log timestamp for registration attempt
