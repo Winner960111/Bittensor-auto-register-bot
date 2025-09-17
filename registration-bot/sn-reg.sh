@@ -20,47 +20,45 @@ proc timestamp {} {
 
 # Function for registration
 proc registration {} {
+    catch {
+        spawn btcli subnet register --wallet.name <> --wallet.hotkey <> --netuid 43
 
-    spawn btcli subnet register --wallet.name <> --wallet.hotkey <> --netuid 43
+        puts "[timestamp] Attempting registration..."
 
-    # Log timestamp for registration attempt
-    puts "[timestamp] Attempting registration..."
+        expect "Enter your password" {
+            send "Graphite12345!@#$%\r"
+            expect ""
+        }
 
-    expect "Enter your password" {
-        send "Graphite12345!@#$%\r"
-        expect ""
-    }
-
-    expect {
-        -re ".*TooManyRegistrationsThisInterval.*|.*❌ Failed.*" {
-            puts "[timestamp] Error encountered: TooManyRegistrationsThisInterval or ❌ Failed. Will retry..."
-            return
-        }
-        -re ".*NotEnoughBalanceToStake.*|.*❌ Failed.*" {
-            puts "[timestamp] Error encountered: NotEnoughBalanceToStake or ❌ Failed. Will retry..."
-            return
-        }
-        -re ".*RegistrationDisabled.*|.*❌ Failed.*" {
-            puts "[timestamp] Error encountered: RegistrationDisabled or ❌ Failed. Will retry..."
-            return
-        }
-        -re ".*Registered.*" {
-            puts "[timestamp] Registration completed successfully."
-            # run_after_successful_registration
-            exit 128
-        }
-        -timeout 180 {
-            puts "[timestamp] Timeout: Unexpected situation. Will retry..."
-            return
-        }
-        eof {
-            puts "[timestamp] Unexpected end of file. Will retry..."
-            return
+        expect {
+            -re ".*TooManyRegistrationsThisInterval.*|.*❌ Failed.*" {
+                puts "[timestamp] Error encountered: TooManyRegistrationsThisInterval or ❌ Failed. Will retry..."
+                return
+            }
+            -re ".*NotEnoughBalanceToStake.*|.*❌ Failed.*" {
+                puts "[timestamp] Error encountered: NotEnoughBalanceToStake or ❌ Failed. Will retry..."
+                return
+            }
+            -re ".*RegistrationDisabled.*|.*❌ Failed.*" {
+                puts "[timestamp] Error encountered: RegistrationDisabled or ❌ Failed. Will retry..."
+                return
+            }
+            -re ".*Registered.*" {
+                puts "[timestamp] Registration completed successfully."
+                exit 128
+            }
+            -timeout 180 {
+                puts "[timestamp] Timeout: Unexpected situation. Will retry..."
+                return
+            }
+            eof {
+                puts "[timestamp] Unexpected end of file. Will retry..."
+                return
+            }
         }
     }
 }
 
-# Run the registration function
 # Run the registration function in a loop
 while {1} {
     registration
